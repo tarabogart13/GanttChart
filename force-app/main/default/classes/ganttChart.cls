@@ -50,6 +50,8 @@ public with sharing class ganttChart {
                         'Default_Role__c' => resource.get('Default_Role__c'),
                         'Part_Type__c' => resource.get('Part_Type__c'),
                         'Article_Id__c' => resource.get('Article_Id__c'),
+                        'Z_Rel_Date__c' => resource.get('Z_Rel_Date__c'),
+                        'Due_Date__c' => resource.get('Due_Date__c'),
                         'allocationsByProject' => new Map<String, Object>()
                     });
                 }
@@ -75,6 +77,8 @@ public with sharing class ganttChart {
                         'Default_Role__c' => resource.Default_Role__c,
                         'Part_Type__c' => resource.Part_Type__c,
                         'Article_Id__c' => resource.Article_Id__c,
+                        'Z_Rel_Date__c' => resource.Z_Rel_Date__c,
+                        'Due_Date__c' => resource.Due_Date__c,
                         'allocationsByProject' => new Map<String, Object>()
                     });
                 }
@@ -83,12 +87,23 @@ public with sharing class ganttChart {
             // organize allocations by resource and project
             for (Allocation__c allocation : allocations) {
                 if (!resourceById.containsKey(allocation.Resource__c)) {
+                    Decimal leftNum = Decimal.valueOf(startDate.daysBetween(allocation.Start_Date__c)) / slotSize;
+                    leftNum = leftNum.round(System.RoundingMode.FLOOR);
+                
+                    Decimal rightNum = Decimal.valueOf(startDate.daysBetween(allocation.End_Date__c)) / slotSize;
+                    rightNum = rightNum.round(System.RoundingMode.FLOOR);
+
+                    
                     resourceById.put(allocation.Resource__c, new Map<String, Object> {
                         'Id' => allocation.Resource__c,
                         'Name' => allocation.Resource__r.Name,
                         'Default_Role__c' => allocation.Resource__r.Default_Role__c,
                         'Part_Type__c' => allocation.Resource__r.Part_Type__c,
                         'Article_Id__c' => allocation.Resource__r.Article_Id__c,
+                        'Z_Rel_Date__c' => allocation.Resource__r.Z_Rel_Date__c,
+                        'Due_Date__c' => allocation.Resource__r.Due_Date__c,
+                        'left' => leftNum,
+                        'right' => rightNum,
                         'allocationsByProject' => new Map<String, Object>()
                     });
                 }
