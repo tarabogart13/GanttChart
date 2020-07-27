@@ -27,12 +27,12 @@
             </value>
             <value>
                 <fullName>HS-LG</fullName>
-                <default>true</default>
+                <default>false</default>
                 <label>Housing 9095+</label>
             </value>
             <value>
                 <fullName>-W</fullName>
-                <default>true</default>
+                <default>false</default>
                 <label>Welding</label>
             </value>
         </valueSetDefinition>
