@@ -48,6 +48,8 @@ public with sharing class ganttChart {
                         'Id' => resource.get('Id'),
                         'Name' => resource.get('Name'),
                         'Default_Role__c' => resource.get('Default_Role__c'),
+                        'Part_Type__c' => resource.get('Part_Type__c'),
+                        'Article_Id__c' => resource.get('Article_Id__c'),
                         'allocationsByProject' => new Map<String, Object>()
                     });
                 }
@@ -71,6 +73,8 @@ public with sharing class ganttChart {
                         'Id' => resource.Id,
                         'Name' => resource.Name,
                         'Default_Role__c' => resource.Default_Role__c,
+                        'Part_Type__c' => resource.Part_Type__c,
+                        'Article_Id__c' => resource.Article_Id__c,
                         'allocationsByProject' => new Map<String, Object>()
                     });
                 }
