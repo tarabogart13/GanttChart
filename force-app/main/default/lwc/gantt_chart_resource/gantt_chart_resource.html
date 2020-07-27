@@ -26,8 +26,7 @@
             <!-- Time Slots-->
             <div class="slds-grid slds-is-absolute lwc-timeslots-container">
                 <template for:each={times} for:item="time" for:index="index">
-                    <div key={time} class={time.class} data-index={index} data-start={time.start} data-end={time.end}
-                        onclick={handleTimeslotClick} ondragenter={handleDragEnter}>
+                    <div key={time} class={time.class} data-index={index} data-start={time.start} data-end={time.end} ondragenter={handleDragEnter}>
                         <!-- nothing -->
                     </div>
                 </template>
@@ -43,26 +42,33 @@
                         <template for:each={project.allocations} for:item="allocation" for:index="allocationIndex">
                             <!-- Allocation -->
                             <div key={allocation.Id} class={allocation.Id}>
-                                <div title={allocation.Name} class={allocation.class} style={allocation.style} data-id={allocation.Id}
+				<div title={allocation.Name} class={allocation.class} style={allocation.style} data-id={allocation.Id}
+                                    data-project={projectIndex} data-allocation={allocationIndex} >
+                                <!--<div title={allocation.Name} class={allocation.class} style={allocation.style} data-id={allocation.Id}
                                     data-project={projectIndex} data-allocation={allocationIndex} draggable="true"
-                                    ondragstart={handleDragStart} ondragend={handleDragEnd}>
+                                    ondragstart={handleDragStart} ondragend={handleDragEnd}>-->
                                     <div class="slds-grid slds-grid_vertical-align-center">
+
                                         <!-- Allocation Left Handle -->
-                                        <div class="slds-col slds-grow-none slds-col_bump-right lwc-allocation_handle handle_left"
+					<div class="slds-col slds-grow-none slds-col_bump-right lwc-allocation_handle handle_left" data-id={allocation.Id}></div>
+
+                                        <!--<div class="slds-col slds-grow-none slds-col_bump-right lwc-allocation_handle handle_left"
                                             draggable="true" ondragstart={handleLeftDragStart} data-id={allocation.Id}>
                                             <lightning-icon icon-name="utility:drag_and_drop" variant="inverse" size="x-small"></lightning-icon>
-                                        </div>
+                                        </div>-->
                                         <!-- /Allocation Left Handle -->
 
                                         <div class="slds-col slds-grow-none lwc-allocation_actions">
-                                            <lightning-button-icon icon-name="utility:down" variant="bare-inverse" size="small"
-                                                onclick={openAllocationMenu} data-id={allocation.Id}></lightning-button-icon>
+                                            <!--<lightning-button-icon icon-name="utility:down" variant="bare-inverse" size="small"
+                                                onclick={openAllocationMenu} data-id={allocation.Id}></lightning-button-icon>-->
                                         </div>
+
                                         <!-- Allocation Right Handle -->
-                                        <div class="slds-col slds-grow-none lwc-allocation_handle handle_right" draggable="true"
+					<div class="slds-col slds-grow-none lwc-allocation_handle handle_right" data-id={allocation.Id}> </div>
+                                        <!--<div class="slds-col slds-grow-none lwc-allocation_handle handle_right" draggable="true"
                                             ondragstart={handleRightDragStart} data-id={allocation.Id}>
                                             <lightning-icon icon-name="utility:drag_and_drop" variant="inverse" size="x-small"></lightning-icon>
-                                        </div>
+                                        </div>-->
                                         <!-- /Allocation Right Handle -->
                                     </div>
                                 </div>
