@@ -18,6 +18,7 @@
     /*cursor: grab;*/
     opacity: .85;
     padding: .25rem;
+    height: 75%;
     pointer-events: auto;
     top: 0px;
 }
