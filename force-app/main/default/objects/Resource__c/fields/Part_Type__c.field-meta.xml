@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Part_Type__c</fullName>
+    <externalId>false</externalId>
+    <label>Part Type</label>
+    <required>true</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>BP</fullName>
+                <default>false</default>
+                <label>Baseplate</label>
+            </value>
+            <value>
+                <fullName>LN</fullName>
+                <default>false</default>
+                <label>Lantern</label>
+            </value>
+            <value>
+                <fullName>HS-SM</fullName>
+                <default>true</default>
+                <label>Housing up to 9095</label>
+            </value>
+            <value>
+                <fullName>HS-LG</fullName>
+                <default>true</default>
+                <label>Housing 9095+</label>
+            </value>
+            <value>
+                <fullName>-W</fullName>
+                <default>true</default>
+                <label>Welding</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>
