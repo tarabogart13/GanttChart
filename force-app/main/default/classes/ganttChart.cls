@@ -140,14 +140,16 @@ public with sharing class ganttChart {
     public static List<Object> getResources() {
         List<Object> resources = new List<Object>();
 
-        for (Resource__c r : [SELECT Id, Name, Default_Role__c
+        for (Resource__c r : [SELECT Id, Name, Default_Role__c, Article_Id__c, Part_Type__c, Z_Rel_Date__c, Due_Date__c
                               FROM Resource__c
                               WHERE Active__c = true
                               ORDER BY Name]) {
             resources.add(new Map<String, Object> {
                 'Id' => r.Id,
                 'Name' => r.Name,
-                'Default_Role__c' => r.Default_Role__c
+                'Default_Role__c' => r.Default_Role__c,
+                'Part_Type__c' => r.Part_Type__c,
+                'Article_Id__c' => r.Article_Id__c
             });
         }
 
