@@ -87,6 +87,8 @@ public with sharing class ganttChart {
                         'Id' => allocation.Resource__c,
                         'Name' => allocation.Resource__r.Name,
                         'Default_Role__c' => allocation.Resource__r.Default_Role__c,
+                        'Part_Type__c' => allocation.Resource__rPart_Type__c,
+                        'Article_Id__c' => allocation.Resource__rArticle_Id__c,
                         'allocationsByProject' => new Map<String, Object>()
                     });
                 }
