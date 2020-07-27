@@ -29,11 +29,6 @@
         <field>Resource__c.Active__c</field>
         <readable>true</readable>
     </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Resource__c.Due_Date__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
     <layoutAssignments>
         <layout>Allocation__c-Allocation Layout</layout>
     </layoutAssignments>
