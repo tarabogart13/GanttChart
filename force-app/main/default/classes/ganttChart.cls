@@ -2,7 +2,7 @@ public with sharing class ganttChart {
     @AuraEnabled
     public static Map<String, Object> getChartData(String recordId, String startTime, String endTime, Integer slotSize, List<String> filterProjects, List<String> filterRoles, String filterStatus) {
         Map<String, Object> data = new Map<String, Object>();
-        String query = 'SELECT Resource__c, Resource__r.Name, Resource__r.Active__c, Resource__r.Default_Role__c, Project__c, Project__r.Name, Project__r.Active__c, Project__r.Color__c, Start_Date__c, End_Date__c, Status__c, Effort__c FROM Allocation__c WHERE Start_Date__c <= :endDate AND End_Date__c >= :startDate AND (Project__c = NULL OR Project__r.Active__c = TRUE) AND Resource__r.Active__c = TRUE';
+        String query = 'SELECT Resource__c, Resource__r.Name, Resource__r.Active__c, Resource__r.Default_Role__c, Resource__r.Article_Id__c, Resource__r.Part_Type__c, Project__c, Project__r.Name, Project__r.Active__c, Project__r.Color__c, Start_Date__c, End_Date__c, Status__c, Effort__c FROM Allocation__c WHERE Start_Date__c <= :endDate AND End_Date__c >= :startDate AND (Project__c = NULL OR Project__r.Active__c = TRUE) AND Resource__r.Active__c = TRUE';
         
         List<Allocation__c> allocations = new List<Allocation__c>();
         Map<String, Object> projectById = new Map<String, Object>();
@@ -63,7 +63,7 @@ public with sharing class ganttChart {
 
                 // empty state on resource page
                 if (allocations.isEmpty() && Id.valueOf(recordId).getSobjectType().getDescribe().getName().endsWith('Resource__c')) {
-                    Resource__c resource = [SELECT Id, Name, Active__c, Default_Role__c
+                    Resource__c resource = [SELECT Id, Name, Active__c, Default_Role__c, Article_Id__c, Part_Type__c
                                             FROM Resource__c
                                             WHERE Id = :recordId];
 
