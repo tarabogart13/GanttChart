@@ -126,7 +126,7 @@ export default class GanttChartResource extends LightningElement {
   calcClass(allocation) {
     let classes = ["slds-is-absolute", "lwc-allocation"];
 
-    switch (allocation.Status__c) {
+    /*switch (allocation.Status__c) {
       case "Unavailable":
         classes.push("unavailable");
         break;
@@ -151,7 +151,7 @@ export default class GanttChartResource extends LightningElement {
         default:
           break;
       }
-    }
+    }*/
 
     return classes.join(" ");
   }
@@ -170,7 +170,7 @@ export default class GanttChartResource extends LightningElement {
         "%"
     ];
 
-    if ("Unavailable" !== allocation.Status__c) {
+    /*if ("Unavailable" !== allocation.Status__c) {
       const backgroundColor = allocation.color;
       const colorMap = {
         Blue: "#1589EE",
@@ -186,7 +186,9 @@ export default class GanttChartResource extends LightningElement {
         Gold: "#FCAF32"
       };
       styles.push("background-color: " + colorMap[backgroundColor]);
-    }
+    }*/
+    
+    styles.push("background-color: #1589EE");
 
     if (!isNaN(this.dragInfo.startIndex)) {
       styles.push("pointer-events: none");
@@ -240,7 +242,7 @@ export default class GanttChartResource extends LightningElement {
         allocation = {...allocation}; //clone immutable object
         allocation.class = self.calcClass(allocation);
         allocation.style = self.calcStyle(allocation);
-        allocation.labelStyle = self.calcLabelStyle(allocation);
+        /*allocation.labelStyle = self.calcLabelStyle(allocation);*/
 
         project.allocations.push(allocation);
       });
