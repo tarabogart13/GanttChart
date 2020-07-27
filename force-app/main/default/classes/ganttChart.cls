@@ -174,7 +174,9 @@ public with sharing class ganttChart {
                 'Name' => r.Name,
                 'Default_Role__c' => r.Default_Role__c,
                 'Part_Type__c' => r.Part_Type__c,
-                'Article_Id__c' => r.Article_Id__c
+                'Article_Id__c' => r.Article_Id__c,
+		'Z_Rel_Date__c' => r.Z_Rel_Date__c,
+		'Due_Date__c' => r.Due_Date__c
             });
         }
 
