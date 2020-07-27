@@ -34,7 +34,7 @@ public with sharing class ganttChart {
             
             // Overview View
             if (String.isEmpty(recordId)) {
-                query += ' ORDER BY Resource__r.Name, Project__r.Name NULLS FIRST, Start_Date__c';
+                query += ' ORDER BY Resource__r.Due_Date__c';
                 System.debug(query);
                 System.debug(startTime);
                 System.debug(endTime);
@@ -71,6 +71,12 @@ public with sharing class ganttChart {
                                             FROM Resource__c
                                             WHERE Id = :recordId];
 
+                    Decimal leftNum = Decimal.valueOf(startDate.daysBetween(resource.Z_Rel_Date__c)) / slotSize;
+                    leftNum = leftNum.round(System.RoundingMode.FLOOR);
+                
+                    Decimal rightNum = Decimal.valueOf(startDate.daysBetween(resource.Due_Date__c)) / slotSize;
+                    rightNum = rightNum.round(System.RoundingMode.FLOOR);
+
                     resourceById.put(resource.Id, new Map<String, Object> {
                         'Id' => resource.Id,
                         'Name' => resource.Name,
@@ -79,6 +85,8 @@ public with sharing class ganttChart {
                         'Article_Id__c' => resource.Article_Id__c,
                         'Z_Rel_Date__c' => resource.Z_Rel_Date__c,
                         'Due_Date__c' => resource.Due_Date__c,
+                        'left' => leftNum,
+                        'right' => rightNum,
                         'allocationsByProject' => new Map<String, Object>()
                     });
                 }
@@ -87,10 +95,10 @@ public with sharing class ganttChart {
             // organize allocations by resource and project
             for (Allocation__c allocation : allocations) {
                 if (!resourceById.containsKey(allocation.Resource__c)) {
-                    Decimal leftNum = Decimal.valueOf(startDate.daysBetween(allocation.Start_Date__c)) / slotSize;
+                    Decimal leftNum = Decimal.valueOf(startDate.daysBetween(allocation.resource__r.Z_Rel_Date__c)) / slotSize;
                     leftNum = leftNum.round(System.RoundingMode.FLOOR);
                 
-                    Decimal rightNum = Decimal.valueOf(startDate.daysBetween(allocation.End_Date__c)) / slotSize;
+                    Decimal rightNum = Decimal.valueOf(startDate.daysBetween(allocation.resource__r.Due_Date__c)) / slotSize;
                     rightNum = rightNum.round(System.RoundingMode.FLOOR);
 
                     
@@ -122,10 +130,12 @@ public with sharing class ganttChart {
 
                 List<Object> projectAllocation = (List<Object>)allocationsByProject.get(allocation.Project__c);
 
-                Decimal left = Decimal.valueOf(startDate.daysBetween(allocation.Start_Date__c)) / slotSize;
+                //Decimal left = Decimal.valueOf(startDate.daysBetween(allocation.Start_Date__c)) / slotSize;
+		Decimal left = Decimal.valueOf(startDate.daysBetween(allocation.Resource__r.Z_Rel_Date__c)) / slotSize;
                 left = left.round(System.RoundingMode.FLOOR);
                 
-                Decimal right = Decimal.valueOf(startDate.daysBetween(allocation.End_Date__c)) / slotSize;
+                //Decimal right = Decimal.valueOf(startDate.daysBetween(allocation.End_Date__c)) / slotSize;
+ 		Decimal right = Decimal.valueOf(startDate.daysBetween(allocation.Resource__r.Due_Date__c)) / slotSize;
                 right = right.round(System.RoundingMode.FLOOR);
 
                 projectAllocation.add(new Map<String, Object> {
