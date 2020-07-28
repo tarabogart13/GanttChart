@@ -14,7 +14,8 @@ export default class GanttChartResource extends LightningElement {
   }
   set resource(_resource) {
     this._resource = _resource;
-    this.setProjects();
+    //this.setProjects();
+    this.setAllocations();
   }
 
   // dates
@@ -63,7 +64,8 @@ export default class GanttChartResource extends LightningElement {
       this.startDate = startDate;
       this.endDate = endDate;
       this.dateIncrement = dateIncrement;
-      this.setProjects();
+      //this.setProjects();
+      this.setAllocations();
     }
   }
 
@@ -92,6 +94,7 @@ export default class GanttChartResource extends LightningElement {
   };
 
   @track projects = [];
+  @track allocations = [];
 
   effortOptions = [
     {
@@ -228,30 +231,21 @@ export default class GanttChartResource extends LightningElement {
     return styles.join("; ");
   }
 
-  setProjects() {
+setAllocations() {
     let self = this;
-    self.projects = [];
+    self.allocations = [];
 
-    Object.keys(self._resource.allocationsByProject).forEach(projectId => {
-      let project = {
-        id: projectId,
-        allocations: []
-      };
-
-      self.resource.allocationsByProject[projectId].forEach(allocation => {
+	self._resource.allocations.forEach(allocation => {
         allocation = {...allocation}; //clone immutable object
         allocation.class = self.calcClass(allocation);
         allocation.style = self.calcStyle(allocation);
-        /*allocation.labelStyle = self.calcLabelStyle(allocation);*/
 
-        project.allocations.push(allocation);
-      });
 
-      self.projects.push(project);
+      self.allocations.push(allocation);
     });
   }
 
-  handleTimeslotClick(event) {
+   handleTimeslotClick(event) {
     const start = new Date(parseInt(event.currentTarget.dataset.start, 10));
     const end = new Date(parseInt(event.currentTarget.dataset.end, 10));
     const startUTC = start.getTime() + start.getTimezoneOffset() * 60 * 1000;
