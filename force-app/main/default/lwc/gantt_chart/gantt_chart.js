@@ -6,7 +6,7 @@ import momentJS from "@salesforce/resourceUrl/momentJS";
 import { loadScript } from "lightning/platformResourceLoader";
 
 import getChartData from "@salesforce/apex/ganttChart.getChartData";
-import getProjects from "@salesforce/apex/ganttChart.getProjects";
+//import getProjects from "@salesforce/apex/ganttChart.getProjects";
 import getResources from "@salesforce/apex/ganttChart.getResources";
 
 export default class GanttChart extends LightningElement {
@@ -372,14 +372,14 @@ export default class GanttChart extends LightningElement {
       this.filterModalData.focus = "projects";
     });
   }
+
   // Mohit's filter by record type
-  filterProjectRecords(event) {
+  /*filterProjectRecords(event) {
     this.hideDropdowns();
   
     let text = event.target.value;
   
     getProjects().then(projects => {
-      // only show projects not selected
       this.filterModalData.projerojectRecordTypeOptions = projects.filter(project => {
         return (
           project.RecordTypeId &&
@@ -401,7 +401,6 @@ export default class GanttChart extends LightningElement {
     this.setFilterModalDataDisable();
   }
 
-  // Mohit's addProjectRecordTypeFilter 
   addProjectRecordTypeFilter(event) {
     this.filterModalData.projectRecordTypes.push(
       Object.assign({}, event.currentTarget.dataset)
@@ -414,7 +413,7 @@ export default class GanttChart extends LightningElement {
   removeProjectFilter(event) {
     this.filterModalData.projects.splice(event.currentTarget.dataset.index, 1);
     this.setFilterModalDataDisable();
-  }
+  }*/
 
   filterRoles(event) {
     this.hideDropdowns();
@@ -584,21 +583,17 @@ export default class GanttChart extends LightningElement {
     let self = this;
 
     getChartData({
-        recordId: self.recordId ? self.recordId : '',
         startTime: self.startDateUTC,
         endTime: self.endDateUTC,
         slotSize: self.view.slotSize,
-        filterProjects: self._filterData.projectIds,
-        filterProjectRecords: self._filterData.projectRecordTypes, // filter for record types
-        filterRoles: self._filterData.roles,
         filterStatus: self._filterData.status
     }).then(data => {
-        self.isResourceView = typeof self.objectApiName !== 'undefined' && self.objectApiName.endsWith('Resource__c');
-        self.isProjectView = typeof self.objectApiName !== 'undefined' && self.objectApiName.endsWith('Project__c');
-        self.isRecordTypeView = typeof self.objectApiName !== 'undefined' && self.objectApiName.endsWith('Project__c');
-        self.projectId = data.projectId;
-        self.projects = data.projects;
-        self.roles = data.roles;
+        //self.isResourceView = typeof self.objectApiName !== 'undefined' && self.objectApiName.endsWith('Resource__c');
+        //self.isProjectView = typeof self.objectApiName !== 'undefined' && self.objectApiName.endsWith('Project__c');
+        //self.isRecordTypeView = typeof self.objectApiName !== 'undefined' && self.objectApiName.endsWith('Project__c');
+        //self.projectId = data.projectId;
+        //self.projects = data.projects;
+        //self.roles = data.roles;
 
         // empty old data
         // we want to keep resources we've already seen
