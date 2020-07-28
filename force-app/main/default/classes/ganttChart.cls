@@ -4,11 +4,13 @@ public with sharing class ganttChart {
         
     //public static Map<String, Object> getChartData(String recordId, String startTime, String endTime, Integer slotSize, List<String> filterProjects, List<String> filterRoles, String filterStatus) {
         Map<String, Object> data = new Map<String, Object>();
-        String query = 'SELECT Resource__c, Resource__r.Name, Resource__r.Active__c, Resource__r.Default_Role__c, Resource__r.Article_Id__c, Resource__r.Part_Type__c, Resource__r.Z_Rel_Date__c, Resource__r.Due_Date__c, Start_Date__c, End_Date__c, Status__c, Effort__c FROM Allocation__c WHERE Start_Date__c <= :endDate AND End_Date__c >= :startDate ';
+        String query = 'SELECT Resource__c, Resource__r.Name, Resource__r.Article_Id__c, Resource__r.Part_Type__c, Resource__r.Z_Rel_Date__c, Resource__r.Due_Date__c, Start_Date__c, End_Date__c, Status__c, Effort__c FROM Allocation__c WHERE Start_Date__c <= :endDate AND End_Date__c >= :startDate ';
         
         List<Allocation__c> allocations = new List<Allocation__c>();
         Map<String, Object> projectById = new Map<String, Object>();
         Map<String, Object> resourceById = new Map<String, Object>();
+        Set<String> roles = new Set<String>();
+
         
         if (String.isNotEmpty(filterStatus)) {
             query += ' AND Status__c = :filterStatus';
@@ -33,7 +35,6 @@ public with sharing class ganttChart {
                     resourceById.put((String)resource.get('Id'), new Map<String, Object> {
                         'Id' => resource.get('Id'),
                         'Name' => resource.get('Name'),
-                        'Default_Role__c' => resource.get('Default_Role__c'),
                         'Part_Type__c' => resource.get('Part_Type__c'),
                         'Article_Id__c' => resource.get('Article_Id__c'),
                         'Z_Rel_Date__c' => resource.get('Z_Rel_Date__c'),
@@ -55,7 +56,6 @@ public with sharing class ganttChart {
                     resourceById.put(allocation.Resource__c, new Map<String, Object> {
                         'Id' => allocation.Resource__c,
                         'Name' => allocation.Resource__r.Name,
-                        'Default_Role__c' => allocation.Resource__r.Default_Role__c,
                         'Part_Type__c' => allocation.Resource__r.Part_Type__c,
                         'Article_Id__c' => allocation.Resource__r.Article_Id__c,
                         'Z_Rel_Date__c' => allocation.Resource__r.Z_Rel_Date__c,
@@ -88,12 +88,12 @@ public with sharing class ganttChart {
                 }
 
 
-                //Decimal left = Decimal.valueOf(startDate.daysBetween(allocation.Start_Date__c)) / slotSize;
-		Decimal left = Decimal.valueOf(startDate.daysBetween(allocation.Resource__r.Z_Rel_Date__c)) / slotSize;
+                Decimal left = Decimal.valueOf(startDate.daysBetween(allocation.Start_Date__c)) / slotSize;
+		//Decimal left = Decimal.valueOf(startDate.daysBetween(allocation.Resource__r.Z_Rel_Date__c)) / slotSize;
                 left = left.round(System.RoundingMode.FLOOR);
                 
-                //Decimal right = Decimal.valueOf(startDate.daysBetween(allocation.End_Date__c)) / slotSize;
- 		Decimal right = Decimal.valueOf(startDate.daysBetween(allocation.Resource__r.Due_Date__c)) / slotSize;
+                Decimal right = Decimal.valueOf(startDate.daysBetween(allocation.End_Date__c)) / slotSize;
+ 		//Decimal right = Decimal.valueOf(startDate.daysBetween(allocation.Resource__r.Due_Date__c)) / slotSize;
                 right = right.round(System.RoundingMode.FLOOR);
 
                 /*projectAllocation.add(new Map<String, Object> {
@@ -110,10 +110,8 @@ public with sharing class ganttChart {
 
 		resourceAllocation.add(new Map<String, Object> {
                     'Id' => allocation.Id,
-                    //'Start_Date__c' => allocation.Start_Date__c,
-                    //'End_Date__c' => allocation.End_Date__c,
-'Start_Date__c' => allocation.Resource__r.Z_Rel_Date__c,
-'End_Date__c' => allocation.Resource__r.Due_Date__c,
+                    'Start_Date__c' => allocation.Start_Date__c,
+                    'End_Date__c' => allocation.End_Date__c,
                     'Status__c' => allocation.Status__c,
                     'Effort__c' => allocation.Effort__c,
                     'left' => left,
@@ -124,6 +122,7 @@ public with sharing class ganttChart {
 
         //data.put('projects', projectById.values());
         data.put('resources', resourceById.values());
+        //data.put('roles', roles);
         
         return data;
     }
@@ -132,11 +131,10 @@ public with sharing class ganttChart {
     public static List<Object> getResources() {
         List<Object> resources = new List<Object>();
 
-        for (Resource__c r : [SELECT Id, Name, Default_Role__c, Article_Id__c, Part_Type__c, Z_Rel_Date__c, Due_Date__c FROM Resource__c ORDER BY Due_Date__c]) {
+        for (Resource__c r : [SELECT Id, Name, Article_Id__c, Part_Type__c, Z_Rel_Date__c, Due_Date__c FROM Resource__c ORDER BY Due_Date__c]) {
             resources.add(new Map<String, Object> {
                 'Id' => r.Id,
                 'Name' => r.Name,
-                'Default_Role__c' => r.Default_Role__c,
                 'Part_Type__c' => r.Part_Type__c,
                 'Article_Id__c' => r.Article_Id__c,
 		'Z_Rel_Date__c' => r.Z_Rel_Date__c,
