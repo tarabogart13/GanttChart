@@ -1,13 +1,13 @@
 import { LightningElement, api, track } from "lwc";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
+import { NavigationMixin } from 'lightning/navigation';
 
 //import getProjects from "@salesforce/apex/ganttChart.getProjects";
 //import saveAllocation from "@salesforce/apex/ganttChart.saveAllocation";
 //import deleteAllocation from "@salesforce/apex/ganttChart.deleteAllocation";
 
-export default class GanttChartResource extends LightningElement {
-  @api isResourceView; // resource page has different layout
-  @api projectId; // used on project page for quick adding of allocations
+//export default class GanttChartResource extends LightningElement {
+export default class GanttChartResource extends NavigationMixin(LightningElement) {
   @api
   get resource() {
     return this._resource;
@@ -125,37 +125,21 @@ this.setAllocations();
     this.refreshDates(this.startDate, this.endDate, this.dateIncrement);
   }
 
+handleTicketView(event) {
+    // Navigate to contact record page
+    this[NavigationMixin.Navigate]({
+        type: 'standard__recordPage',
+        attributes: {
+            recordId: event.target.value,
+            objectApiName: 'Resource__c',
+            actionName: 'view',
+        },
+    });
+}
+
   // calculate allocation classes
   calcClass(allocation) {
     let classes = ["slds-is-absolute", "lwc-allocation"];
-
-    /*switch (allocation.Status__c) {
-      case "Unavailable":
-        classes.push("unavailable");
-        break;
-      case "Hold":
-        classes.push("hold");
-        break;
-      default:
-        break;
-    }
-
-    if ("Unavailable" !== allocation.Status__c) {
-      switch (allocation.Effort__c) {
-        case "Low":
-          classes.push("low-effort");
-          break;
-        case "Medium":
-          classes.push("medium-effort");
-          break;
-        case "High":
-          classes.push("high-effort");
-          break;
-        default:
-          break;
-      }
-    }*/
-
     return classes.join(" ");
   }
 
@@ -237,7 +221,6 @@ setAllocations() {
 
 	self._resource.allocations.forEach(allocation => {
         allocation = {...allocation}; //clone immutable object
-        allocation.class = self.calcClass(allocation);
         allocation.style = self.calcStyle(allocation);
 
 
