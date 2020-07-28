@@ -1,9 +1,9 @@
 import { LightningElement, api, track } from "lwc";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
-import getProjects from "@salesforce/apex/ganttChart.getProjects";
-import saveAllocation from "@salesforce/apex/ganttChart.saveAllocation";
-import deleteAllocation from "@salesforce/apex/ganttChart.deleteAllocation";
+//import getProjects from "@salesforce/apex/ganttChart.getProjects";
+//import saveAllocation from "@salesforce/apex/ganttChart.saveAllocation";
+//import deleteAllocation from "@salesforce/apex/ganttChart.deleteAllocation";
 
 export default class GanttChartResource extends LightningElement {
   @api isResourceView; // resource page has different layout
@@ -15,7 +15,7 @@ export default class GanttChartResource extends LightningElement {
   set resource(_resource) {
     this._resource = _resource;
     //this.setProjects();
-    this.setAllocations();
+this.setAllocations();
   }
 
   // dates
@@ -65,7 +65,7 @@ export default class GanttChartResource extends LightningElement {
       this.endDate = endDate;
       this.dateIncrement = dateIncrement;
       //this.setProjects();
-      this.setAllocations();
+this.setAllocations();
     }
   }
 
