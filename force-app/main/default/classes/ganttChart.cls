@@ -31,7 +31,17 @@ public with sharing class ganttChart {
 
                 // display all active resources
                 for (Object r : ganttChart.getResources()) {
-                    Map<String, Object> resource = (Map<String, Object>)r;
+			Map<String, Object> resource = (Map<String, Object>)r;
+
+			Decimal left = Decimal.valueOf(startDate.daysBetween(date.valueOf(resource.get('Z_Rel_Date__c')))) / slotSize;
+                        left = left.round(System.RoundingMode.FLOOR);
+                
+                        Decimal right = Decimal.valueOf(startDate.daysBetween(date.valueOf(resource.get('Due_Date__c')))) / slotSize;
+                        right = right.round(System.RoundingMode.FLOOR);
+
+			System.debug('Resource - LEFT: ' + left + ' RIGHT: ' + right);
+
+
                     resourceById.put((String)resource.get('Id'), new Map<String, Object> {
                         'Id' => resource.get('Id'),
                         'Name' => resource.get('Name'),
@@ -39,8 +49,11 @@ public with sharing class ganttChart {
                         'Article_Id__c' => resource.get('Article_Id__c'),
                         'Z_Rel_Date__c' => resource.get('Z_Rel_Date__c'),
                         'Due_Date__c' => resource.get('Due_Date__c'),
+			'Start_Date__c' => resource.get('Z_Rel_Date__c'),
+                    	'End_Date__c' => resource.get('Due_Date__c'),
+                        'left' => left,
+                        'right' => right,
 			'allocations' => new List<Object>()
-                        //'allocationsByProject' => new Map<String, Object>()
                     });
                 }
 
@@ -52,6 +65,8 @@ public with sharing class ganttChart {
                 
                     Decimal right = Decimal.valueOf(startDate.daysBetween(allocation.resource__r.Due_Date__c)) / slotSize;
                     right = right.round(System.RoundingMode.FLOOR);
+
+			System.debug('Resource - LEFT: ' + left + ' RIGHT: ' + right);
 
                     resourceById.put(allocation.Resource__c, new Map<String, Object> {
                         'Id' => allocation.Resource__c,
@@ -110,12 +125,14 @@ public with sharing class ganttChart {
                     'right' => right
                 });*/
 
+		System.debug('Allocation - LEFT: ' + left + ' RIGHT: ' + right);
+
 		resourceAllocation.add(new Map<String, Object> {
                     'Id' => allocation.Id,
                     //'Start_Date__c' => allocation.Start_Date__c,
                     //'End_Date__c' => allocation.End_Date__c,
-			'Start_Date__c' => allocation.Resource__r.Z_Rel_Date__c,
-                    	'End_Date__c' => allocation.Resource__r.Due_Date__c,
+		    'Start_Date__c' => allocation.Resource__r.Z_Rel_Date__c,
+                    'End_Date__c' => allocation.Resource__r.Due_Date__c,
                     'Status__c' => allocation.Status__c,
                     'Effort__c' => allocation.Effort__c,
                     'left' => left,
