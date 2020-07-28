@@ -47,11 +47,11 @@ public with sharing class ganttChart {
             // organize allocations by resource and project
             for (Allocation__c allocation : allocations) {
                 if (!resourceById.containsKey(allocation.Resource__c)) {
-                    Decimal leftNum = Decimal.valueOf(startDate.daysBetween(allocation.resource__r.Z_Rel_Date__c)) / slotSize;
-                    leftNum = leftNum.round(System.RoundingMode.FLOOR);
+                    Decimal left = Decimal.valueOf(startDate.daysBetween(allocation.resource__r.Z_Rel_Date__c)) / slotSize;
+                    left = left.round(System.RoundingMode.FLOOR);
                 
-                    Decimal rightNum = Decimal.valueOf(startDate.daysBetween(allocation.resource__r.Due_Date__c)) / slotSize;
-                    rightNum = rightNum.round(System.RoundingMode.FLOOR);
+                    Decimal right = Decimal.valueOf(startDate.daysBetween(allocation.resource__r.Due_Date__c)) / slotSize;
+                    right = right.round(System.RoundingMode.FLOOR);
 
                     resourceById.put(allocation.Resource__c, new Map<String, Object> {
                         'Id' => allocation.Resource__c,
@@ -60,8 +60,10 @@ public with sharing class ganttChart {
                         'Article_Id__c' => allocation.Resource__r.Article_Id__c,
                         'Z_Rel_Date__c' => allocation.Resource__r.Z_Rel_Date__c,
                         'Due_Date__c' => allocation.Resource__r.Due_Date__c,
-                        'left' => leftNum,
-                        'right' => rightNum,
+			'Start_Date__c' => allocation.Resource__r.Z_Rel_Date__c,
+                    	'End_Date__c' => allocation.Resource__r.Due_Date__c,
+                        'left' => left,
+                        'right' => right,
 			'allocations' => new List<Object>()
                     });
                 }
@@ -88,12 +90,12 @@ public with sharing class ganttChart {
                 }
 
 
-                Decimal left = Decimal.valueOf(startDate.daysBetween(allocation.Start_Date__c)) / slotSize;
-		//Decimal left = Decimal.valueOf(startDate.daysBetween(allocation.Resource__r.Z_Rel_Date__c)) / slotSize;
+                //Decimal left = Decimal.valueOf(startDate.daysBetween(allocation.Start_Date__c)) / slotSize;
+		Decimal left = Decimal.valueOf(startDate.daysBetween(allocation.Resource__r.Z_Rel_Date__c)) / slotSize;
                 left = left.round(System.RoundingMode.FLOOR);
                 
-                Decimal right = Decimal.valueOf(startDate.daysBetween(allocation.End_Date__c)) / slotSize;
- 		//Decimal right = Decimal.valueOf(startDate.daysBetween(allocation.Resource__r.Due_Date__c)) / slotSize;
+                //Decimal right = Decimal.valueOf(startDate.daysBetween(allocation.End_Date__c)) / slotSize;
+ 		Decimal right = Decimal.valueOf(startDate.daysBetween(allocation.Resource__r.Due_Date__c)) / slotSize;
                 right = right.round(System.RoundingMode.FLOOR);
 
                 /*projectAllocation.add(new Map<String, Object> {
@@ -110,8 +112,10 @@ public with sharing class ganttChart {
 
 		resourceAllocation.add(new Map<String, Object> {
                     'Id' => allocation.Id,
-                    'Start_Date__c' => allocation.Start_Date__c,
-                    'End_Date__c' => allocation.End_Date__c,
+                    //'Start_Date__c' => allocation.Start_Date__c,
+                    //'End_Date__c' => allocation.End_Date__c,
+			'Start_Date__c' => allocation.Resource__r.Z_Rel_Date__c,
+                    	'End_Date__c' => allocation.Resource__r.Due_Date__c,
                     'Status__c' => allocation.Status__c,
                     'Effort__c' => allocation.Effort__c,
                     'left' => left,
@@ -144,14 +148,6 @@ public with sharing class ganttChart {
 
         return resources;
     }
-
-    /*@AuraEnabled
-    public static List<Project__c> getProjects() {
-        return [SELECT Id, Name
-                FROM Project__c
-                WHERE Active__c = true
-                ORDER BY Name];
-    }*/
 
     /*@AuraEnabled
     public static void saveAllocation(Id allocationId, Id projectId, Id resourceId, String effort, String status, String startDate, String endDate) {
