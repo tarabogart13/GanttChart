@@ -9,8 +9,6 @@ public with sharing class ganttChart {
         List<Allocation__c> allocations = new List<Allocation__c>();
         Map<String, Object> projectById = new Map<String, Object>();
         Map<String, Object> resourceById = new Map<String, Object>();
-        Set<String> roles = new Set<String>();
-
         
         if (String.isNotEmpty(filterStatus)) {
             query += ' AND Status__c = :filterStatus';
@@ -90,12 +88,12 @@ public with sharing class ganttChart {
                 }
 
 
-                Decimal left = Decimal.valueOf(startDate.daysBetween(allocation.Start_Date__c)) / slotSize;
-		//Decimal left = Decimal.valueOf(startDate.daysBetween(allocation.Resource__r.Z_Rel_Date__c)) / slotSize;
+                //Decimal left = Decimal.valueOf(startDate.daysBetween(allocation.Start_Date__c)) / slotSize;
+		Decimal left = Decimal.valueOf(startDate.daysBetween(allocation.Resource__r.Z_Rel_Date__c)) / slotSize;
                 left = left.round(System.RoundingMode.FLOOR);
                 
-                Decimal right = Decimal.valueOf(startDate.daysBetween(allocation.End_Date__c)) / slotSize;
- 		//Decimal right = Decimal.valueOf(startDate.daysBetween(allocation.Resource__r.Due_Date__c)) / slotSize;
+                //Decimal right = Decimal.valueOf(startDate.daysBetween(allocation.End_Date__c)) / slotSize;
+ 		Decimal right = Decimal.valueOf(startDate.daysBetween(allocation.Resource__r.Due_Date__c)) / slotSize;
                 right = right.round(System.RoundingMode.FLOOR);
 
                 /*projectAllocation.add(new Map<String, Object> {
@@ -112,8 +110,10 @@ public with sharing class ganttChart {
 
 		resourceAllocation.add(new Map<String, Object> {
                     'Id' => allocation.Id,
-                    'Start_Date__c' => allocation.Start_Date__c,
-                    'End_Date__c' => allocation.End_Date__c,
+                    //'Start_Date__c' => allocation.Start_Date__c,
+                    //'End_Date__c' => allocation.End_Date__c,
+'Start_Date__c' => allocation.Resource__r.Z_Rel_Date__c,
+'End_Date__c' => allocation.Resource__r.Due_Date__c,
                     'Status__c' => allocation.Status__c,
                     'Effort__c' => allocation.Effort__c,
                     'left' => left,
@@ -124,7 +124,6 @@ public with sharing class ganttChart {
 
         //data.put('projects', projectById.values());
         data.put('resources', resourceById.values());
-        //data.put('roles', roles);
         
         return data;
     }
