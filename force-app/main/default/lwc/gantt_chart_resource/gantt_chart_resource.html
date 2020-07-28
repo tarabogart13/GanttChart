@@ -8,10 +8,10 @@
                 </div>-->
                 <div class="slds-media__body slds-truncate">
                     <h3 class="slds-text-body_default">
-                        {resource.Name}
+			<lightning-button key={resource.Id} variant="base" label={resource.Name} title="View Ticket" onclick={handleTicketView} value={resource.Id}></lightning-button>
                     </h3>
                     <h3 class="slds-text-body_small slds-text-color_weak">
-                        {resource.Part_Type__c}<!--{resource.Default_Role__c}-->
+                        {resource.Part_Type__c}
                     </h3>
                     <h3 class="slds-text-body_small slds-text-color_weak">
                         {resource.Article_Id__c}
@@ -40,7 +40,7 @@
                         <template for:each={allocations} for:item="allocation" for:index="allocationIndex">
                             <!-- Allocation -->
                             <div key={allocation.Id} class={allocation.Id}>
-				<div title={allocation.Name} class={allocation.class} style={allocation.style} data-id={allocation.Id} data-allocation={allocationIndex} >
+				<div title={allocation.Name} class="slds-is-absolute lwc-allocation" style={allocation.style} data-id={allocation.Id} data-allocation={allocationIndex} >
                                 <div class="slds-grid slds-grid_vertical-align-center">
 
                                         <!-- Allocation Left Handle -->
