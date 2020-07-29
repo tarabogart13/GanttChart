@@ -2,11 +2,6 @@ import { LightningElement, api, track } from "lwc";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { NavigationMixin } from 'lightning/navigation';
 
-//import getProjects from "@salesforce/apex/ganttChart.getProjects";
-//import saveAllocation from "@salesforce/apex/ganttChart.saveAllocation";
-//import deleteAllocation from "@salesforce/apex/ganttChart.deleteAllocation";
-
-//export default class GanttChartResource extends LightningElement {
 export default class GanttChartResource extends NavigationMixin(LightningElement) {
   @api
   get resource() {
@@ -14,7 +9,8 @@ export default class GanttChartResource extends NavigationMixin(LightningElement
   }
   set resource(_resource) {
     this._resource = _resource;
-    //this.setProjects();
+
+	//this.setProjects();
 this.setAllocations();
   }
 
@@ -25,6 +21,7 @@ this.setAllocations();
 
   @api
   refreshDates(startDate, endDate, dateIncrement) {
+console.log('refreshDates');
     if (startDate && endDate && dateIncrement) {
       let times = [];
       let today = new Date();
@@ -65,7 +62,7 @@ this.setAllocations();
       this.endDate = endDate;
       this.dateIncrement = dateIncrement;
       //this.setProjects();
-this.setAllocations();
+      this.setAllocations();
     }
   }
 
@@ -219,13 +216,21 @@ setAllocations() {
     let self = this;
     self.allocations = [];
 
-	self._resource.allocations.forEach(allocation => {
+    	let resource = {...self._resource}; //clone immutable object
+        resource.style = this.calcStyle(resource);
+
+	self._resource = resource;
+
+self.allocations.push(resource);
+    
+
+    /*self._resource.allocations.forEach(allocation => {
         allocation = {...allocation}; //clone immutable object
         allocation.style = self.calcStyle(allocation);
 
 
-      self.allocations.push(allocation);
-    });
+      	self.allocations.push(allocation);
+    });*/
   }
 
    handleTimeslotClick(event) {
